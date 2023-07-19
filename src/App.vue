@@ -3,15 +3,18 @@
     <div class="app__list">
       <lists-component></lists-component>
     </div>
-    <div class="app__list"></div>
+    <div class="app__list">
+      <lists-with-items></lists-with-items>
+    </div>
   </div>
 </template>
 
 <script>
 import ListsComponent from "./components/ListsComponent.vue";
+import ListsWithItems from "./components/ListsWithItems.vue";
 
 export default {
-  components: { ListsComponent },
+  components: { ListsComponent, ListsWithItems },
   name: "App",
 };
 </script>
@@ -26,8 +29,8 @@ export default {
 }
 
 .app {
-  width: 100vw;
-  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
   padding: 30px 90px;
   display: flex;
   flex-direction: row;

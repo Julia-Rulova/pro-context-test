@@ -13,6 +13,7 @@
           type="checkbox"
           :checked="list.isActiveItems"
           v-model="list.isActiveItems"
+          @input="handleSetListActive(list)"
         />
         <p>{{ list.name }}</p>
       </div>
@@ -61,11 +62,15 @@ export default {
       this.$store.commit("setListShow", { listId: list.id, val: !list.show });
     },
     handleSetAmount(list, item) {
-      this.$store.commit("setItemAmount", {
-        listId: list.id,
-        itemId: item.id,
-        amount: item.amount,
-      });
+      if (item.amount < 0) {
+        alert("Количество должно быть не меньше 0!");
+      } else {
+        this.$store.commit("setItemAmount", {
+          listId: list.id,
+          itemId: item.id,
+          amount: item.amount,
+        });
+      }
     },
     handleSetColor(list, item) {
       this.$store.commit("setItemColor", {
@@ -78,12 +83,25 @@ export default {
       this.$store.commit("setItemActive", {
         listId: list.id,
         itemId: item.id,
-        active: !item.active,
+        val: !item.active,
+      });
+
+      this.$store.commit("checkListActive", list.id);
+    },
+    handleSetListActive(list) {
+      this.$store.commit("setListActive", {
+        listId: list.id,
+        val: !list.isActiveItems,
       });
     },
   },
   computed: {
     ...mapGetters(["lists"]),
+  },
+  mounted() {
+    this.lists.forEach((list) => {
+      this.$store.commit("checkListActive", list.id);
+    });
   },
 };
 </script>

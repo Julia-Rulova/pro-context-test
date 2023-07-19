@@ -43,6 +43,7 @@ export default createStore({
                         active: true
                     },
                 ],
+                isRandomSort: false,
                 isActiveItems: true,
                 show: false
             },
@@ -107,6 +108,7 @@ export default createStore({
                         active: true
                     },
                 ],
+                isRandomSort: false,
                 isActiveItems: true,
                 show: false
             },
@@ -150,6 +152,7 @@ export default createStore({
                         active: false
                     },
                 ],
+                isRandomSort: false,
                 isActiveItems: false,
                 show: false
             },
@@ -207,6 +210,7 @@ export default createStore({
                         active: false
                     },
                 ],
+                isRandomSort: false,
                 isActiveItems: false,
                 show: false
             },
@@ -243,6 +247,7 @@ export default createStore({
                         active: false
                     },
                 ],
+                isRandomSort: false,
                 isActiveItems: true,
                 show: false
             },
@@ -269,5 +274,34 @@ export default createStore({
             let currentItems = state.lists.find(l => l.id === listId).items
             currentItems.find(i => i.id === itemId).active = val
         },
+        checkListActive(state, listId) {
+            let currentList = state.lists.find(l => l.id === listId)
+
+            let activeItem = currentList.items.find(i => i.active === true)
+
+            if (!activeItem) {
+                currentList.isActiveItems = false
+            } else {
+                currentList.isActiveItems = true
+            }
+        },
+        setListActive(state, { listId, val }) {
+            let currentList = state.lists.find(l => l.id === listId)
+            currentList.isActiveItems = val
+
+
+            currentList.items.forEach(item => {
+                if (val === true) {
+                    item.active = true
+                } else {
+                    item.active = false
+                }
+            })
+
+        },
+        setItemsSort(state, { listId, val }) {
+            let currentList = state.lists.find(l => l.id === listId)
+            currentList.isRandomSort = val
+        }
     }
 })

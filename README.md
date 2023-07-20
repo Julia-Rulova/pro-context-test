@@ -1,4 +1,7 @@
-# pro-context-test
+# Тестовое задание для компании ПроКотекст
+### Задание выполнено с использованием Vue и Vuex
+
+Ссылка на [сайт](https://pro-context-test.vercel.app/)
 
 ## Project setup
 ```

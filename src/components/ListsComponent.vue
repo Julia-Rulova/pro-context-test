@@ -82,6 +82,8 @@ export default {
           amount: Number(evt.target.value),
         });
       }
+
+      this.$store.commit("setSort", list);
     },
     handleSetColor(list, item) {
       this.$store.commit("setItemColor", {
@@ -89,6 +91,8 @@ export default {
         itemId: item.id,
         color: item.color,
       });
+
+      this.$store.commit("setSort", list);
     },
     handleSetActive(list, item) {
       this.$store.commit("setItemActive", {

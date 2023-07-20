@@ -318,8 +318,8 @@ export default createStore({
                 let targetArray = [];
 
                 for (let i = 0; i < list.items.length; i++) {
-                    if (list.items[i].active) {
-                        for (let j = 0; j <= list.items[i].amount; j++) {
+                    if (list.items[i].active && list.items[i].amount) {
+                        for (let j = 0; j < list.items[i].amount; j++) {
                             targetArray.push(list.items[i].color);
                         }
                     }

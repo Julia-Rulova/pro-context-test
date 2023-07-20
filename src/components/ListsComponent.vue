@@ -38,7 +38,7 @@
               min="0"
               max="100"
               v-model="item.amount"
-              @keyup.enter="handleSetAmount(list, item)"
+              @input="handleSetAmount($event, list, item)"
             />
             <input
               class="item__color-input"
@@ -61,14 +61,25 @@ export default {
     handleShowList(list) {
       this.$store.commit("setListShow", { listId: list.id, val: !list.show });
     },
-    handleSetAmount(list, item) {
-      if (item.amount < 0) {
-        alert("Количество должно быть не меньше 0!");
+    handleSetAmount(evt, list, item) {
+      console.log(evt.target.value);
+      if (evt.target.value < 0 || !evt.target.value) {
+        this.$store.commit("setItemAmount", {
+          listId: list.id,
+          itemId: item.id,
+          amount: 0,
+        });
+      } else if (evt.target.value > 99) {
+        this.$store.commit("setItemAmount", {
+          listId: list.id,
+          itemId: item.id,
+          amount: 99,
+        });
       } else {
         this.$store.commit("setItemAmount", {
           listId: list.id,
           itemId: item.id,
-          amount: item.amount,
+          amount: Number(evt.target.value),
         });
       }
     },
@@ -87,12 +98,15 @@ export default {
       });
 
       this.$store.commit("checkListActive", list.id);
+      this.$store.commit("setSort", list);
     },
     handleSetListActive(list) {
       this.$store.commit("setListActive", {
         listId: list.id,
         val: !list.isActiveItems,
       });
+
+      this.$store.commit("setSort", list);
     },
   },
   computed: {

@@ -251,11 +251,15 @@ export default createStore({
                 isActiveItems: true,
                 show: false
             },
-        ]
+        ],
+        sortedArrays: {}
     },
     getters: {
         lists(state) {
             return state.lists
+        },
+        sortedArrays(state) {
+            return state.sortedArrays
         }
     },
     mutations: {
@@ -302,6 +306,32 @@ export default createStore({
         setItemsSort(state, { listId, val }) {
             let currentList = state.lists.find(l => l.id === listId)
             currentList.isRandomSort = val
-        }
-    }
+        },
+        deleteItemSort(state, { list, color }) {
+            let currentList = state.lists.find(l => l.id === list.id)
+            let currentItems = currentList.items.find(i => i.color === color)
+
+            currentItems.amount--
+        },
+        setSort(state, list) {
+            if (list.isRandomSort) {
+                let targetArray = [];
+
+                for (let i = 0; i < list.items.length; i++) {
+                    if (list.items[i].active) {
+                        for (let j = 0; j <= list.items[i].amount; j++) {
+                            targetArray.push(list.items[i].color);
+                        }
+                    }
+                }
+
+                for (let i = targetArray.length - 1; i > 0; i--) {
+                    let j = Math.floor(Math.random() * (i + 1));
+                    [targetArray[i], targetArray[j]] = [targetArray[j], targetArray[i]];
+                }
+
+                state.sortedArrays[list.id] = targetArray;
+            }
+        },
+    },
 })

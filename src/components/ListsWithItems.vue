@@ -13,7 +13,17 @@
         </button>
       </div>
 
-      <ul class="list__items" v-if="list.isRandomSort && list.show"></ul>
+      <ul class="list__items" v-if="list.isRandomSort && list.show">
+        <li class="list__items-list">
+          <div
+            class="list__item"
+            :style="{ backgroundColor: item }"
+            v-for="(item, index) in sortedArrays[list.id]"
+            :key="index"
+            @click="deleteSortedItem(list, index, item)"
+          ></div>
+        </li>
+      </ul>
 
       <ul class="list__items" v-else-if="!list.isRandomSort && list.show">
         <li
@@ -26,6 +36,7 @@
             :style="{ backgroundColor: items.color }"
             v-for="(item, index) in items.amount"
             :key="index"
+            @click="deleteItem(list, items)"
           ></div>
         </li>
       </ul>
@@ -41,20 +52,35 @@ export default {
     handleShowList(list) {
       this.$store.commit("setListShow", { listId: list.id, val: !list.show });
     },
+    shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    },
     setSort(list) {
       this.$store.commit("setItemsSort", {
         listId: list.id,
         val: !list.isRandomSort,
       });
 
-      //   if (list.isRandomSor) {
-      //     let targetArray = [];
+      this.$store.commit("setSort", list);
+    },
+    deleteSortedItem(list, itemIndex, item) {
+      this.sortedArrays[list.id].splice(itemIndex, 1);
 
-      //   }
+      this.$store.commit("deleteItemSort", { list: list, color: item });
+    },
+    deleteItem(list, item) {
+      this.$store.commit("setItemAmount", {
+        listId: list.id,
+        itemId: item.id,
+        amount: item.amount - 1,
+      });
     },
   },
   computed: {
-    ...mapGetters(["lists"]),
+    ...mapGetters(["lists", "sortedArrays"]),
   },
 };
 </script>
